@@ -1,0 +1,26 @@
+import VuexPersistence from 'vuex-persist';
+import actions from "./actions";
+import mutations from "./mutations";
+
+Vue.use(Vuex);
+
+const vuexLocal = new VuexPersistence({
+    key: 'vuex-store'
+});
+
+export const store = new Vuex.Store({
+    state: {
+        url_prefix: "",
+        user: {},
+        offers: {},
+        socket: {
+            isConnected: false,
+            message: '',
+            reconnectError: false,
+        },
+        actionMessage: ""
+    },
+    mutations,
+    actions,
+    plugins: [vuexLocal.plugin]
+});

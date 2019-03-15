@@ -135,8 +135,6 @@ func validateAdminMessage(w http.ResponseWriter, r *http.Request, message AdminM
 
     json.Unmarshal(body, message)
 
-    fmt.Println("Admin", AdminPassword)
-
     if message.GetPassword() != AdminPassword && len(AdminPassword) > 0 {
         return errors.New("Invalid Admin credentials")
     }

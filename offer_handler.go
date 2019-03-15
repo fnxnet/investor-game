@@ -37,7 +37,6 @@ func (oh *OfferHandler) Handle(message []byte, broadcast chan []byte) (e error) 
 }
 
 func (oh *OfferHandler) NewOffer(om *OfferMessage, channel chan []byte) (e error) {
-    fmt.Println(om)
     offer := om.Payload
     if !offer.HasUuid() {
         offer.UUid = uuid.New()
@@ -55,7 +54,6 @@ func (oh *OfferHandler) NewOffer(om *OfferMessage, channel chan []byte) (e error
     offer.User = user
 
     user.CoinsLocked += offer.Coins
-    fmt.Println(user)
     if user.CoinsLocked > user.Coins {
         return errors.New("You have insufficient amount of Coins")
     }

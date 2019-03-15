@@ -10,10 +10,9 @@ export default {
     {
         this.commit('offerBought', offer.payload);
     },
-    offerRemoved(context, offer)
+    offerRemoved(context, data)
     {
-        this.commit('removeOffer', offer.payload, [1,2,3]);
-        console.log("remove offer", offer)
+        this.commit('removeOffer', data.payload);
     },
     error(context, data)
     {

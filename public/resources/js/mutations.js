@@ -46,14 +46,16 @@ export default {
             }
         }
     },
-    removeOffer(state, data, e)
+    removeOffer(state, data)
     {
         let offer = state.offers.find(offer => offer.id === data.id);
 
-        console.log('e', e);
-
         if(offer) {
             offer.active = false;
+        }
+
+        if(state.user.token === data.user.token) {
+            state.user = data.user
         }
     },
     errorReceived(state, data)

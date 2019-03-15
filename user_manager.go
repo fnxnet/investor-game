@@ -107,8 +107,6 @@ func (um *UserManager) FindByKey(key string) (u *User, e error) {
     u.Coins = coins
     u.CoinsLocked = coinsLocked
 
-    fmt.Println(u, cash, coins)
-
     return u, nil
 }
 

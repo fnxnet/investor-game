@@ -155,7 +155,6 @@
                     return this.buyAll(offer);
                 }
 
-                console.log('dasad')
                 this.offerModal.display = true;
                 this.offerModal.offer = offer;
                 this.coins = offer.coins;
@@ -163,7 +162,6 @@
             buyPart()
             {
                 let o = JSON.parse(JSON.stringify(this.offerModal.offer));
-                console.log('buy part', o);
                 o.coins = this.coins;
                 this.buyAll(o)
                 // console.log(o)
@@ -182,10 +180,6 @@
                 };
 
                 this.$socket.sendObj(message);
-            },
-            test()
-            {
-                console.log('test')
             }
         },
         components: {

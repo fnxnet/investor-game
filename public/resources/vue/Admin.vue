@@ -148,7 +148,6 @@
             },
             sumOffers()
             {
-                console.log("sumOffers");
                 let sum = 0;
 
                 this.stats.offers.map(offer => {
@@ -272,7 +271,6 @@
             },
             updateStats()
             {
-                console.log('update chart');
                 let sets = this.chart.data.datasets;
                 this.chart.data.labels = Array.from(Array(this.stats.offers.length).keys());
 
@@ -285,7 +283,6 @@
             {
                 let url = this.$store.state.url_prefix + '/admin/' + (this.locked ? 'unlock' : 'lock');
                 axios.post(url, {password: this.password}).then(data => {
-                    console.log(data);
                     this.locked = !this.locked;
                 }).catch(error => {
                     alert('Ups');
@@ -325,7 +322,6 @@
                     }
                 }).catch(error => {
                     alert('Ups!');
-                    console.log(error);
                 });
             },
             getTheWinner()
@@ -338,16 +334,14 @@
                 axios.post(url, data).then(data => {
                     this.winners = data.data || [];
                 }).catch(error => {
-                    console.log(error);
+                    alert('Ups!');
                 });
             },
             loginAdmin()
             {
                 let url = this.$store.state.url_prefix + '/register-admin';
                 axios.post(url, {password: this.password}).then(data => {
-                    this.$store.commit('register', data.data).then(() => {
-                        console.log('success')
-                    })
+                    this.$store.commit('register', data.data);
                 }).catch(error => {
                     if(error.response === undefined) {
                         return
@@ -372,8 +366,7 @@
                     this.$store.commit("clearStats");
 
                 }).catch(error => {
-                    alert('invalid data');
-                    console.log(error)
+                    alert('Ups!');
                 });
             },
         },

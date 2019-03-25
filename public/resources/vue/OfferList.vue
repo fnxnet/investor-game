@@ -164,7 +164,6 @@
                 let o = JSON.parse(JSON.stringify(this.offerModal.offer));
                 o.coins = this.coins;
                 this.buyAll(o)
-                // console.log(o)
                 this.offerModal.display = false
             },
             buyAll(offer)

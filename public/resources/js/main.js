@@ -11,7 +11,9 @@ let options = {
     reconnectionDelay: 3000,
 };
 
-Vue.use(VueNativeSock, 'ws://0.0.0.0:3030/ws', options);
+let url = 'ws://' + window.location.host + '/ws'
+
+Vue.use(VueNativeSock, url, options);
 
 const app = new Vue({
     el: "#app",

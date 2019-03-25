@@ -26,7 +26,6 @@ export default {
     },
     offerBought(state, data)
     {
-        console.log(data);
         let buyer = data.payload.buyer;
         let owner = data.payload.owner;
 
@@ -46,7 +45,6 @@ export default {
             else {
 
                 offer.coins -= data.coins;
-                console.log("OFFER", offer);
             }
         }
 
@@ -78,7 +76,6 @@ export default {
     },
     errorReceived(state, data)
     {
-        console.log(data);
         if(data.user.token === state.user.token) {
             state.actionMessage = data.error;
         }
@@ -104,7 +101,6 @@ export default {
     SOCKET_ONCLOSE(state, event)
     {
         state.socket.isConnected = false;
-        console.log(event)
     },
     SOCKET_ONERROR(state, event)
     {

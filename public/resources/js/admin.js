@@ -11,10 +11,12 @@ let options = {
     reconnectionDelay: 3000,
 };
 
-Vue.use(VueNativeSock, 'ws://localhost:3030/ws', options);
+let url = 'ws://' + window.location.host + '/ws'
+
+Vue.use(VueNativeSock, url, options);
 
 Vue.filter('toCurrency', function (value) {
-    if (typeof value !== "number") {
+    if(typeof value !== "number") {
         return value;
     }
     var formatter = new Intl.NumberFormat('pl-PL', {

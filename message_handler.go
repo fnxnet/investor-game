@@ -3,6 +3,7 @@ package main
 import (
     "encoding/json"
     "errors"
+    "fmt"
 )
 
 type handler interface {
@@ -48,6 +49,7 @@ func (mh *MessageHandler) HandleMessage(content []byte, broadcast chan []byte) {
         }
 
     } else {
+        fmt.Println(e.Error())
         e = errors.New("Invalid user token")
     }
 

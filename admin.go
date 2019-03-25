@@ -46,20 +46,6 @@ func unlock(hub *Hub, w http.ResponseWriter, r *http.Request) {
     hub.unlock()
 }
 
-func stats(hub *Hub, w http.ResponseWriter, r *http.Request) {
-
-    stats := make(map[string]interface{})
-    data := make(map[string]interface{})
-    data["stats"] = stats
-    stats["chunk"] = chunkStats
-    stats["global"] = mainStats
-    data["user_count"] = len(userManager.All())
-    data["best_offer"] = mainStats.BestOffer
-
-    m, _ := json.Marshal(data)
-    w.Write(m)
-}
-
 func best(hub *Hub, w http.ResponseWriter, r *http.Request) {
     msg := &SimpleMessage{}
     if e := validateAdminMessage(w, r, msg); e != nil {
@@ -69,16 +55,6 @@ func best(hub *Hub, w http.ResponseWriter, r *http.Request) {
 
     m, _ := json.Marshal(userManager.MostCash())
     w.Write(m)
-}
-
-func resetStats(w http.ResponseWriter, r *http.Request) {
-    msg := &SimpleMessage{}
-    if e := validateAdminMessage(w, r, msg); e != nil {
-        http.Error(w, e.Error(), 500)
-        return
-    }
-
-    chunkStats.Reset()
 }
 
 func clearAll(w http.ResponseWriter, r *http.Request) {

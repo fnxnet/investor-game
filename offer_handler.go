@@ -142,9 +142,6 @@ func (oh *OfferHandler) AcceptOffer(om *OfferMessage, channel chan []byte) (e er
         offerManager.Save(*dbOffer)
     }
 
-    chunkStats.RecordOffer(offer)
-    mainStats.RecordOffer(offer)
-
     offer.Payload = map[string]User{"buyer": *buyer, "owner": *owner}
 
     oh.sendResponse(om.Callback, offer, channel)

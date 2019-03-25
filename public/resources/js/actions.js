@@ -3,7 +3,6 @@ import axios from 'axios'
 export default {
     offerReceived(context, offer)
     {
-        console.log(offer)
         this.commit('addNewOffer', offer.payload);
     },
     offerBought(context, offer)
@@ -13,6 +12,10 @@ export default {
     offerRemoved(context, data)
     {
         this.commit('removeOffer', data.payload);
+    },
+    userRegistered(context, data)
+    {
+        this.commit('increaseUserCount');
     },
     error(context, data)
     {

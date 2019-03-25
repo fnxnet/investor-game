@@ -22,7 +22,7 @@ func newHub() *Hub {
         register:   make(chan *Client),
         unregister: make(chan *Client),
         clients:    make(map[*Client]bool),
-        ignore: false,
+        ignore:     false,
     }
 }
 
@@ -32,6 +32,12 @@ func (h *Hub) lock() {
 
 func (h *Hub) unlock() {
     h.ignore = false
+}
+
+func (h *Hub) send(message []byte) {
+    for client := range h.clients {
+        client.send <- message
+    }
 }
 
 func (h *Hub) run() {

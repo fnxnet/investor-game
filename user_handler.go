@@ -11,7 +11,7 @@ type UserResponse struct {
     Error   string `json:"error"`
 }
 
-func registerUser(w http.ResponseWriter, r *http.Request) {
+func registerUser(hub *Hub, w http.ResponseWriter, r *http.Request) {
     if r.Method == http.MethodGet {
         http.Error(w, "", 403)
         return
@@ -46,6 +46,13 @@ func registerUser(w http.ResponseWriter, r *http.Request) {
 
     d, _ := json.Marshal(user)
     w.Write(d)
+
+    data := make(map[string]interface{})
+    data["action"] = "userRegistered"
+
+    m, _ := json.Marshal(data)
+
+    hub.send(m)
 }
 
 func registerAdmin(w http.ResponseWriter, r *http.Request) {

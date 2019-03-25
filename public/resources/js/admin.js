@@ -13,6 +13,18 @@ let options = {
 
 Vue.use(VueNativeSock, 'ws://localhost:3030/ws', options);
 
+Vue.filter('toCurrency', function (value) {
+    if (typeof value !== "number") {
+        return value;
+    }
+    var formatter = new Intl.NumberFormat('pl-PL', {
+        style: 'currency',
+        currency: 'PLN',
+        minimumFractionDigits: 2
+    });
+    return formatter.format(value);
+});
+
 const app = new Vue({
     el: "#app",
     store,

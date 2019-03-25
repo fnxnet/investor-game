@@ -32,20 +32,19 @@
       </div>
     </div>
 
-    <div class="row" :class="{'d-none':!showStats}">
-      <div class="stats col-4">
-        <div class="stats" v-if="stats">
-          <h3>Cash spend: {{stats.stats.chunk.TotalCash}}</h3>
-          <h3>Coins: {{stats.stats.chunk.CoinsSold}}</h3>
-          <h3><u>Average: {{avg?avg:0}}</u></h3>
-          <h3>BestOffer: {{stats.best_offer}}</h3>
-          <h3>Users: {{stats.user_count}}</h3>
+    <div class="row" :class="['divider', {'d-none':!showStats}]">
+      <div class="stats col-5">
+        <div>
+          <h3>Transactions: {{stats.offers.length}}</h3>
+          <h3>Coins: {{sumCoins}}</h3>
+          <h3>Users: {{userCount}}</h3>
+          <hr/>
+          <h3>Cash spend: {{sumOffers | toCurrency}}</h3>
+          <h3><b>BestOffer: {{bestOffer | toCurrency}}</b></h3>
+          <h3><u>Average: {{avgAmount | toCurrency}}</u></h3>
         </div>
-        <button type="button" class="btn btn-danger" @click="resetStats">ResetStats</button>
-        <button v-if="!statsInterval" type="button" class="btn btn-success" @click="toggleStats">Start stats</button>
-        <button v-else type="button" class="btn btn-warning" @click="toggleStats">Stop stats</button>
       </div>
-      <div class="col-8">
+      <div class="col-7">
         <div class="chart" style="width:100%;height:300px">
           <canvas id="myChart"></canvas>
         </div>
@@ -58,7 +57,7 @@
       </div>
     </div>
 
-    <div class="row" v-if="income">
+    <div class="row " v-if="income">
       <div class="col">
         <div class="input-group mb-4">
           <input type="number" class="form-control" placeholder="Previous" v-model.number="shares.prev"/>
@@ -74,7 +73,7 @@
       </div>
     </div>
 
-    <div class="row lower" v-if="income">
+    <div class="row lower divider" v-if="income">
       <div class="col-6">
         <h2><span :style="{ color: diffColor}">Diff: {{shareDiff}}</span></h2>
       </div>
@@ -117,20 +116,6 @@
                     current: '',
                     prev: '',
                 },
-                stats: {
-                    stats: {
-                        chunk: {
-                            TotalCash: '',
-                            CoinsSold: '',
-                        },
-                        global: {
-                            TotalCash: '',
-                            CoinsSold: '',
-                        },
-                    },
-                    user_count: "",
-                    best_offer: ""
-                },
                 offer: {
                     price: '',
                     amount: '',
@@ -149,9 +134,67 @@
             }
         },
         computed: {
+            userCount()
+            {
+                return this.$store.state.stats.user_count;
+            },
             lockLabel()
             {
                 return this.locked ? "Unlock" : "Lock"
+            },
+            stats()
+            {
+                return this.$store.state.stats;
+            },
+            sumOffers()
+            {
+                console.log("sumOffers");
+                let sum = 0;
+
+                this.stats.offers.map(offer => {
+                    sum += offer.coins * offer.price
+                });
+
+                return sum
+            },
+            avgAmount()
+            {
+                let total = this.sumOffers;
+                let len = this.sumCoins;
+
+                return total && len ? total / len : 0;
+            },
+            sumCoins()
+            {
+                let total = 0;
+
+                this.stats.offers.map(offer => {
+                    total += offer.coins
+                });
+
+                return total;
+            },
+            globalOffers()
+            {
+                let offers = [];
+
+                this.stats.offers.map(offer => {
+                    offers.push(offer.price)
+                });
+
+                return offers;
+            },
+            bestOffer()
+            {
+                let best = 0;
+
+                this.stats.offers.map(offer => {
+                    if(offer.price >= best) {
+                        best = offer.price;
+                    }
+                });
+
+                return best
             },
             diffColor()
             {
@@ -187,11 +230,11 @@
             this.chart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: [],
+                    labels: Array.from(Array(this.stats.offers.length).keys()),
                     datasets: [
                         {
-                            label: 'Avg Price',
-                            data: [],
+                            label: 'Price',
+                            data: this.globalOffers,
                             backgroundColor: [
                                 'rgba(255, 255, 255, 0.2)',
                             ],
@@ -199,29 +242,7 @@
                                 'rgba(255,99,132,1)',
                             ],
                             borderWidth: 1
-                        },
-                        {
-                            label: 'Users',
-                            data: [],
-                            backgroundColor: [
-                                'rgba(255, 255, 255, 0.2)',
-                            ],
-                            borderColor: [
-                                'rgba(8,100,149,1)',
-                            ],
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Best',
-                            data: [],
-                            backgroundColor: [
-                                'rgba(255, 255, 255, 0.2)',
-                            ],
-                            borderColor: [
-                                'rgba(8, 181, 135,1)',
-                            ],
-                            borderWidth: 1
-                        },
+                        }
                     ]
                 },
                 options: {
@@ -234,6 +255,8 @@
                     }
                 }
             });
+
+            setInterval(this.updateStats, 1000);
         },
         methods: {
             toggleStats()
@@ -249,37 +272,14 @@
             },
             updateStats()
             {
-                axios.post(this.$store.state.url_prefix + '/admin/stats', {password: this.password}).then(data => {
-                    this.stats = data.data;
+                console.log('update chart');
+                let sets = this.chart.data.datasets;
+                this.chart.data.labels = Array.from(Array(this.stats.offers.length).keys());
 
-                    console.log(data.data);
+                sets[0].data = this.globalOffers;
+                sets[0].data = this.globalOffers;
 
-                    let sets = this.chart.data.datasets;
-                    this.chart.data.labels.push(null);
-
-                    console.log(this.stats.user_count);
-                    sets[0].data.push([this.avg]);
-                    sets[1].data.push([this.stats.user_count]);
-                    sets[2].data.push([this.stats.best_offer]);
-
-                    if(sets[0].data.length > 15) {
-                        this.chart.data.labels.shift();
-                        sets.map(set => {
-                            set.data.shift()
-                        })
-                    }
-                    this.chart.update();
-                });
-            },
-            resetStats()
-            {
-                let url = this.$store.state.url_prefix + '/admin/reset';
-
-                axios.post(url, {password: this.password}).then(data => {
-                    this.updateStats()
-                }).catch(error => {
-                    console.log(error);
-                });
+                this.chart.update();
             },
             swapLock()
             {
@@ -287,6 +287,8 @@
                 axios.post(url, {password: this.password}).then(data => {
                     console.log(data);
                     this.locked = !this.locked;
+                }).catch(error => {
+                    alert('Ups');
                 });
 
             },
@@ -319,9 +321,10 @@
                 axios.post(url, data).then(data => {
                     this.shares = {
                         current: '',
-                        prev: '',
+                        prev: this.shares.current,
                     }
                 }).catch(error => {
+                    alert('Ups!');
                     console.log(error);
                 });
             },
@@ -365,7 +368,11 @@
                 let url = this.$store.state.url_prefix + '/admin/clear';
                 axios.post(url, {password: this.password}).then(data => {
                     this.controls = false;
+
+                    this.$store.commit("clearStats");
+
                 }).catch(error => {
+                    alert('invalid data');
                     console.log(error)
                 });
             },
@@ -378,5 +385,9 @@
 <style scoped>
   .row.lower {
     margin-bottom: 30px;
+  }
+
+  .divider {
+    border-bottom: 1px solid #ccc;
   }
 </style>

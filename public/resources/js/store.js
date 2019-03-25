@@ -13,6 +13,13 @@ export const store = new Vuex.Store({
         url_prefix: "",
         user: {},
         offers: {},
+        stats: {
+            offers: [],
+            sum: 0,
+            max: 0,
+            avg: 0,
+            user_count: 0,
+        },
         socket: {
             isConnected: false,
             message: '',

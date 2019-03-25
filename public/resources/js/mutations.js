@@ -9,6 +9,10 @@ export default {
         state.user = {};
         state.offers = [];
     },
+    increaseUserCount(state)
+    {
+        state.stats.user_count++;
+    },
     addNewOffer(state, offer)
     {
         offer.active = true;
@@ -45,6 +49,20 @@ export default {
                 console.log("OFFER", offer);
             }
         }
+
+        this.commit("addToStats", offer);
+    },
+    addToStats(state, offer)
+    {
+        state.stats.offers.push(offer);
+    },
+    clearStats(state)
+    {
+        state.stats.offers = [];
+        state.stats.avg = 0;
+        state.stats.max = 0;
+        state.stats.sum = 0;
+        state.stats.user_count = 0;
     },
     removeOffer(state, data)
     {

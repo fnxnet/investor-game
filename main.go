@@ -21,8 +21,6 @@ var rdb = redis.NewClient(&redis.Options{
 
 var userManager = NewUserManager(rdb)
 var offerManager = NewOfferManager(rdb)
-var mainStats = NewStats("main", rdb)
-var chunkStats = NewStats("chunk", rdb)
 
 func offers(hub *Hub, w http.ResponseWriter, r *http.Request) {
     m, _ := json.Marshal(offerManager.All())
@@ -54,19 +52,13 @@ func main() {
 
     http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
         enableCORS(w, r, func() {
-            registerUser(w, r)
+            registerUser(hub, w, r)
         })
     })
 
     http.HandleFunc("/register-admin", func(w http.ResponseWriter, r *http.Request) {
         enableCORS(w, r, func() {
             registerAdminUser(w, r)
-        })
-    })
-
-    http.HandleFunc("/admin/stats", func(w http.ResponseWriter, r *http.Request) {
-        enableCORS(w, r, func() {
-            stats(hub, w, r)
         })
     })
 
@@ -79,12 +71,6 @@ func main() {
     http.HandleFunc("/admin/share", func(w http.ResponseWriter, r *http.Request) {
         enableCORS(w, r, func() {
             shareIncome(w, r)
-        })
-    })
-
-    http.HandleFunc("/admin/reset", func(w http.ResponseWriter, r *http.Request) {
-        enableCORS(w, r, func() {
-            resetStats(w, r)
         })
     })
 

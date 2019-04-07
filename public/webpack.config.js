@@ -10,6 +10,7 @@ module.exports = {
     entry: {
         main: './resources/js/main.js',
         admin: './resources/js/admin.js',
+        panel: './resources/js/panel.js',
     },
     output: {
         path: path.resolve(__dirname, 'static/js'),

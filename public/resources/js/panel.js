@@ -1,5 +1,5 @@
 import VueNativeSock from 'vue-native-websocket'
-import AdminPanel from '../vue/AdminPanel';
+import Panel from '../vue/Panel';
 import {store} from './store';
 
 Vue.config.devtools = true;
@@ -30,6 +30,6 @@ Vue.filter('toCurrency', function (value) {
 const app = new Vue({
     el: "#app",
     store,
-    template: '<AdminPanel/>',
-    components: {AdminPanel}
+    template: '<panel/>',
+    components: {Panel}
 });

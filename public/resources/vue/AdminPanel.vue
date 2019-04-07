@@ -60,9 +60,9 @@
     <div class="row " v-if="income">
       <div class="col">
         <div class="input-group mb-4">
-          <button class="btn btn-outline-success" type="button" @click="shareIncome(20000)">20 000</button>
-          <button class="btn btn-outline-success" type="button" @click="shareIncome(40000)">40 000</button>
-          <button class="btn btn-outline-success" type="button" @click="shareIncome(60000)">60 000</button>
+          <button class="btn btn-outline-success" type="button" @click="shareIncome(107000)">107000</button>
+          <button class="btn btn-outline-success" type="button" @click="shareIncome(9200)">9200</button>
+          <button class="btn btn-outline-success" type="button" @click="shareIncome(36000)">36000</button>
 
           <!--<input type="number" class="form-control" placeholder="Previous" v-model.number="shares.prev"/>-->
           <!--<div class="input-group-prepend" @click="swapShares">-->
@@ -74,15 +74,6 @@
           <!--</div>-->
 
         </div>
-      </div>
-    </div>
-
-    <div class="row lower divider" v-if="income">
-      <div class="col-6">
-        <h2><span :style="{ color: diffColor}">Diff: {{shareDiff}}</span></h2>
-      </div>
-      <div class="col-6">
-        <h2><span style="color: green;"> Share: {{shareAmount}}</span></h2>
       </div>
     </div>
 

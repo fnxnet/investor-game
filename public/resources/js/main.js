@@ -11,7 +11,7 @@ let options = {
     reconnectionDelay: 3000,
 };
 
-let url = 'ws://' + window.location.host + '/ws'
+let url = 'ws://' + window.location.host.replace('admin.', '') + '/ws'
 
 Vue.use(VueNativeSock, url, options);
 

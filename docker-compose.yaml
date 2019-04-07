@@ -15,5 +15,6 @@ services:
       - redis
   redis:
     image: redis
+    container_name: golang-game-redis
     ports:
       - "6379:6379"

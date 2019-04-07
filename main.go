@@ -70,7 +70,7 @@ func main() {
 
     http.HandleFunc("/admin/share", func(w http.ResponseWriter, r *http.Request) {
         enableCORS(w, r, func() {
-            shareIncome(w, r)
+            shareIncome(hub, w, r)
         })
     })
 

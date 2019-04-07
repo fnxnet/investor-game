@@ -60,14 +60,18 @@
     <div class="row " v-if="income">
       <div class="col">
         <div class="input-group mb-4">
-          <input type="number" class="form-control" placeholder="Previous" v-model.number="shares.prev"/>
-          <div class="input-group-prepend" @click="swapShares">
-            <button class="btn btn-outline-info" type="button">Swap</button>
-          </div>
-          <input type="number" class="form-control" placeholder="Current" v-model.number="shares.current"/>
-          <div class="input-group-append" @click="shareIncome">
-            <button class="btn btn-outline-success" type="button">Share Income</button>
-          </div>
+          <button class="btn btn-outline-success" type="button" @click="shareIncome(20000)">20 000</button>
+          <button class="btn btn-outline-success" type="button" @click="shareIncome(40000)">40 000</button>
+          <button class="btn btn-outline-success" type="button" @click="shareIncome(60000)">60 000</button>
+
+          <!--<input type="number" class="form-control" placeholder="Previous" v-model.number="shares.prev"/>-->
+          <!--<div class="input-group-prepend" @click="swapShares">-->
+            <!--<button class="btn btn-outline-info" type="button">Swap</button>-->
+          <!--</div>-->
+          <!--<input type="number" class="form-control" placeholder="Current" v-model.number="shares.current"/>-->
+          <!--<div class="input-group-append" @click="shareIncome">-->
+            <!--<button class="btn btn-outline-success" type="button">Share Income</button>-->
+          <!--</div>-->
 
         </div>
       </div>
@@ -306,20 +310,18 @@
 
                 this.$socket.sendObj(message);
             },
-            shareIncome()
+            shareIncome(amount)
             {
                 let url = this.$store.state.url_prefix + '/admin/share';
                 let data = {
                     password: this.password,
-                    current: this.shares.current,
-                    prev: this.shares.prev,
+                    // current: this.shares.current,
+                    // prev: this.shares.prev,
+                    diff: amount,
                 };
 
                 axios.post(url, data).then(data => {
-                    this.shares = {
-                        current: '',
-                        prev: this.shares.current,
-                    }
+                    console.log('shared', data);
                 }).catch(error => {
                     alert('Ups!');
                 });

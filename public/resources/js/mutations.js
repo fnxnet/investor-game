@@ -54,6 +54,12 @@ export default {
     {
         state.stats.offers.push(offer);
     },
+    updateUser(state, user)
+    {
+        if(state.user.token === user.token) {
+            state.user = user
+        }
+    },
     clearStats(state)
     {
         state.stats.offers = [];

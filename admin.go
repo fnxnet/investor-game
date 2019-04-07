@@ -24,6 +24,7 @@ type ShareMessage struct {
     SimpleMessage
     Prev    float64 `json:"prev"`
     Current float64 `json:"current"`
+    Diff    float64 `json:"diff"`
 }
 
 func lock(hub *Hub, w http.ResponseWriter, r *http.Request) {
@@ -77,7 +78,7 @@ func registerAdminUser(w http.ResponseWriter, r *http.Request) {
     registerAdmin(w, r)
 }
 
-func shareIncome(w http.ResponseWriter, r *http.Request) {
+func shareIncome(hub *Hub, w http.ResponseWriter, r *http.Request) {
     msg := &ShareMessage{}
 
     if e := validateAdminMessage(w, r, msg); e != nil {
@@ -85,12 +86,21 @@ func shareIncome(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    amount := msg.Current - msg.Prev
     users := userManager.All()
 
     for _, user := range users {
-        user.Cash += amount / 1000 * float64(user.Coins)
-        userManager.Save(user)
+        if user.Coins > 0 {
+            user.Cash += msg.Diff / 1000 * float64(user.Coins)
+            userManager.Save(user)
+
+            data := make(map[string]interface{})
+            data["action"] = "incomeReceived"
+            data["user"] = user
+
+            m, _ := json.Marshal(data)
+
+            hub.send(m)
+        }
     }
 }
 

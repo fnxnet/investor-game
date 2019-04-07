@@ -17,6 +17,10 @@ export default {
     {
         this.commit('increaseUserCount');
     },
+    incomeReceived(context, data)
+    {
+        this.commit('updateUser', data.user);
+    },
     error(context, data)
     {
         this.commit('errorReceived', data);

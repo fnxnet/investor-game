@@ -1,7 +1,7 @@
 version: '2'
 services:
   golang:
-    container_name: golang-game
+    container_name: golang_game
     build: .
     command: sh -c "go run *.go --front"
     volumes:
@@ -15,6 +15,6 @@ services:
       - redis
   redis:
     image: redis
-    container_name: golang-game-redis
+    container_name: golang_game_redis
     ports:
       - "6379:6379"

@@ -127,8 +127,8 @@ func (oh *OfferHandler) AcceptOffer(om *OfferMessage, channel chan []byte) (e er
     owner.Cash += float64(total)
     buyer.Cash -= float64(total)
 
-    owner.Coins -= dbOffer.Coins
-    buyer.Coins += dbOffer.Coins
+    owner.Coins -= offer.Coins
+    buyer.Coins += offer.Coins
 
     dbOffer.Coins -= offer.Coins
     owner.CoinsLocked -= offer.Coins

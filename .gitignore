@@ -77,3 +77,4 @@ fabric.properties
 /public/static/js/*
 /public/node_modules/
 /.passwd
+.idea

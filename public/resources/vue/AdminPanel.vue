@@ -63,6 +63,7 @@
           <button class="btn btn-outline-success" type="button" @click="shareIncome(107000)">107000</button>
           <button class="btn btn-outline-success" type="button" @click="shareIncome(9200)">9200</button>
           <button class="btn btn-outline-success" type="button" @click="shareIncome(36000)">36000</button>
+          <button class="btn btn-outline-success" type="button" @click="shareIncome(110000)">110000</button>
 
           <!--<input type="number" class="form-control" placeholder="Previous" v-model.number="shares.prev"/>-->
           <!--<div class="input-group-prepend" @click="swapShares">-->
